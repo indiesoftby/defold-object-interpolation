@@ -1,4 +1,12 @@
 name: "main"
+collection_instances {
+  id: "test3_collection"
+  collection: "/test/2d/test_as_collection.collection"
+  position {
+    x: 505.07635
+    y: 156.98318
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "main"

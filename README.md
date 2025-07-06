@@ -77,8 +77,11 @@ max_count = 1024
 > [!TIP]
 > I would like to remind that players do not only have 60Hz displays, so the best setup for your game loop is to run logic and update physics in fixed time step, and then display a interpolated visuals to viewers. This means that players with 120, 144, 240, and 360Hz displays will get the best gaming experience.
 
-TODO
-The best use case is to create a collection with 2 objects, where the first object has `collisionobject` and `objectinterpolation` components, and the second object displays the first one on screen and accordingly will have a `sprite` component or `model` component.
+The best use case is to create a collection with 2 objects, where the first object has `collisionobject` and `objectinterpolation` components, and the second object displays the first one on screen and accordingly will have a `sprite` component or `model` component:
+
+![Collection Example](example_collection.png)
+
+TODO Add project setup example for 2D and 3D.
 
 ## License
 
