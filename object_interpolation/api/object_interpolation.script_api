@@ -1,0 +1,29 @@
+- name: object_interpolation
+  type: table
+  desc: The Object Interpolation Component for Defold
+  members:
+  - name: set_enabled
+    type: function
+    desc: Enable or disable the object interpolation (globally).
+    args:
+      - name: enabled
+        type: boolean
+
+  - name: is_enabled
+    type: function
+    desc: Check if the object interpolation is enabled (globally).
+    return:
+      - name: enabled
+        type: boolean
+
+  - name: APPLY_TRANSFORM_NONE
+    type: number
+    desc: No transformation.
+
+  - name: APPLY_TRANSFORM_TARGET
+    type: number
+    desc: Apply interpolation to the target object.
+
+  - name: APPLY_TRANSFORM_RENDER
+    type: number
+    desc: Use interpolated values for rendering only.

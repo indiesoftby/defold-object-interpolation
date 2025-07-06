@@ -1,0 +1,30 @@
+syntax = "proto2";
+package dmObjectInterpolationDDF;
+
+import "ddf/ddf_extensions.proto";
+import "ddf/ddf_math.proto";
+import "script/ddf_script.proto";
+
+option java_package = "com.dynamo.objectinterpolation.proto";
+option java_outer_classname = "ObjectInterpolation";
+
+message ObjectInterpolationDesc
+{
+    enum ApplyTransform
+    {
+        APPLY_TRANSFORM_NONE   = 0 [(displayName) = "None"];
+        APPLY_TRANSFORM_TARGET = 1 [(displayName) = "Target Object"];
+        APPLY_TRANSFORM_RENDER = 2 [(displayName) = "Render Only"];
+    }
+
+    required ApplyTransform apply_transform = 1 [default = APPLY_TRANSFORM_NONE];
+
+    // If apply_transform is APPLY_TRANSFORM_TARGET, this is the target object to apply interpolated transform into
+    optional string target_object = 2;
+}
+
+message SetApplyTransform
+{
+    required ObjectInterpolationDesc.ApplyTransform apply_transform = 1;
+    optional uint64 target_object = 2;
+}

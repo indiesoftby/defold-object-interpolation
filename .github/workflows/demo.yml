@@ -1,0 +1,33 @@
+name: Build demo
+
+on: [workflow_dispatch, push, pull_request]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install Java ♨️
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Build 🔧
+        env:
+          BOB_SHA1: ${{ secrets.BOB_SHA1 }}
+          PLATFORM: wasm-web
+          ARCHITECTURES: wasm-web
+          OUTPUT_DIR: public
+        run: |
+          lsb_release -a
+          ./utils/build_demo.sh
+
+      - name: Deploy to Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: public
+        if: github.ref == 'refs/heads/main'

@@ -1,0 +1,43 @@
+[bootstrap]
+main_collection = /test/2d/main.collectionc
+
+[script]
+shared_state = 1
+
+[display]
+width = 768
+height = 640
+high_dpi = 1
+
+[android]
+input_method = HiddenInputField
+
+[project]
+title = object_interpolation_test
+version = dev
+
+[library]
+include_dirs = object_interpolation
+
+[input]
+game_binding = /builtins/input/all.input_bindingc
+
+[physics]
+debug = 0
+use_fixed_timestep = 1
+gravity_y = -1000.0
+scale = 0.01
+velocity_threshold = 100.0
+
+[engine]
+fixed_update_frequency = 20
+max_time_step = 0.05
+
+[native_extension]
+app_manifest = /test/2d/box2d_new.appmanifest
+
+[render]
+clear_color_red = 0.8
+clear_color_green = 0.8
+clear_color_blue = 0.8
+

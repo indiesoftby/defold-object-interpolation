@@ -1,0 +1,51 @@
+go.property("test_url", msg.url())
+
+local DISPLAY_WIDTH = sys.get_config_int("display.width")
+local DISPLAY_HEIGHT = sys.get_config_int("display.height")
+
+--- Adjust camera zoom so that the original area covered by
+-- display width and height of game.project is always visible
+local function fixed_fit_projection(global_zoom)
+    local w, h = window.get_size()
+    local scale = window.get_display_scale()
+    local zoom = global_zoom * math.min(w / scale / DISPLAY_WIDTH, h / scale / DISPLAY_HEIGHT)
+    go.set("/camera#camera", "orthographic_zoom", zoom)
+end
+
+function init(self)
+--     print("    .target_object", go.get("/test0#objectinterpolation", "target_object"))
+--     print("    .mode", go.get("/test0#objectinterpolation", "mode"))
+--     print("    .position", go.get("/test0#objectinterpolation", "position"))
+--     print("    .rotation", go.get("/test0#objectinterpolation", "rotation"))
+-- 
+--     msg.post("/test1#objectinterpolation", "set_target_object", { id = hash("/test2") })
+
+    -- msg.post("/test0#objectinterpolation", "disable")
+    -- msg.post("/test1#objectinterpolation", "disable")
+    -- timer.delay(1, false, function()
+    --     msg.post("/test1#objectinterpolation", "enable")
+    -- end)
+
+    -- msg.post("/test1#sprite", "disable")
+    -- go.set("/test1#sprite", "tint.w", 0)
+
+    msg.post("@render:", "clear_color", { color = vmath.vector4(0.8, 0.8, 0.8, 1) })
+
+    local hinge_props = { enable_motor = true, enable_limit = false, max_motor_torque = 3000, motor_speed = 0.1 * math.pi}
+    physics.create_joint(physics.JOINT_TYPE_HINGE, "/level#collisionobject", "pinpoint", vmath.vector3(768/2, 640/2, 0), "/pinpoint#collisionobject", vmath.vector3(0), hinge_props)
+
+    for i = 1, 20 do
+        local angle = math.random() * math.pi * 2
+        local x = math.cos(angle) * 50
+        local y = math.sin(angle) * 50
+        factory.create("#test_object", go.get_position("/pinpoint") + vmath.vector3(x, y, 0))
+    end
+end
+
+function update(self, dt)
+    fixed_fit_projection(0.6)
+end
+
+function fixed_update(self, dt)
+end
+

@@ -1,0 +1,6 @@
+name: ObjectInterpolationExt
+
+platforms:
+    common:
+        context:
+            symbols: ["ResourceTypeObjectInterpolationExt","ComponentTypeObjectInterpolationExt"]

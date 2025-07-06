@@ -1,0 +1,10 @@
+images {
+  image: "/test/2d/assets/block_fall.png"
+}
+images {
+  image: "/test/2d/assets/block_idle.png"
+}
+images {
+  image: "/test/2d/assets/block_rest.png"
+}
+inner_padding: 2
