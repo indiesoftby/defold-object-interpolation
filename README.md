@@ -12,7 +12,9 @@ Add this extension as a dependency to your `game.project` and click `Project` / 
 
     https://github.com/indiesoftby/defold-object-interpolation/archive/main.zip
 
-It makes available a new component called `Object Interpolation`, which you can add to any game object.
+It makes available a new component called `Object Interpolation`, which you can add to any game object:
+
+![Add Component Example](example_add_component.png)
 
 ## Component Modes
 
