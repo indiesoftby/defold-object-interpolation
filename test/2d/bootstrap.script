@@ -1,11 +1,5 @@
 function init(self)
 	msg.post("#collectionproxy", "async_load")
-
-	-- timer.delay(3, true, function()
-	-- 	msg.post("#collectionproxy", "unload")
-	-- end)
-
-	-- profiler.enable_ui(true)
 end
 
 function final(self)
@@ -21,7 +15,6 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("proxy_loaded") then
 		msg.post(sender, "acquire_input_focus")
 		msg.post(sender, "enable")
-		-- msg.post(sender, "set_time_step", { factor = 1, mode = 0 })
 	elseif message_id == hash("proxy_unloaded") then
 		msg.post(sender, "async_load")
 	end

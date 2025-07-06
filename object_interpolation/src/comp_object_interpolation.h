@@ -30,20 +30,17 @@ namespace dmObjectInterpolation
         // Target object to interpolate into if APPLY_TRANSFORM_TARGET is set
         dmGameObject::HInstance m_TargetInstance;
 
-        // TODO: update the comments!!!
-        // Interpolation reference point: position and rotation at the moment of the last FixedUpdate
-        // In APPLY_TRANSFORM_RENDER contains the previous interpolated value (m_NextPosition)
-        // In APPLY_TRANSFORM_TARGET is obtained from the current value of the target object
+        // TODO: update the comments
+        // In APPLY_TRANSFORM_RENDER ...
+        // In APPLY_TRANSFORM_TARGET ...
         dmVMath::Point3 m_FromPosition;
         dmVMath::Quat   m_FromRotation;
 
-        // Snapshot of the actual position and rotation of the object at render time (before interpolation)
-        // Used in PostUpdate to restore the original value in APPLY_TRANSFORM_RENDER mode
+        // ...
         dmVMath::Point3 m_PreRenderPosition;
         dmVMath::Quat   m_PreRenderRotation;
 
-        // Calculated interpolated position and rotation for the current frame
-        // Result of lerp/slerp between m_FromPosition and the current position/rotation of the object
+        // ...
         dmVMath::Point3 m_NextPosition;
         dmVMath::Quat   m_NextRotation;
 

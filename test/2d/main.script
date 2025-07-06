@@ -13,22 +13,6 @@ local function fixed_fit_projection(global_zoom)
 end
 
 function init(self)
---     print("    .target_object", go.get("/test0#objectinterpolation", "target_object"))
---     print("    .mode", go.get("/test0#objectinterpolation", "mode"))
---     print("    .position", go.get("/test0#objectinterpolation", "position"))
---     print("    .rotation", go.get("/test0#objectinterpolation", "rotation"))
--- 
---     msg.post("/test1#objectinterpolation", "set_target_object", { id = hash("/test2") })
-
-    -- msg.post("/test0#objectinterpolation", "disable")
-    -- msg.post("/test1#objectinterpolation", "disable")
-    -- timer.delay(1, false, function()
-    --     msg.post("/test1#objectinterpolation", "enable")
-    -- end)
-
-    -- msg.post("/test1#sprite", "disable")
-    -- go.set("/test1#sprite", "tint.w", 0)
-
     msg.post("@render:", "clear_color", { color = vmath.vector4(0.8, 0.8, 0.8, 1) })
 
     local hinge_props = { enable_motor = true, enable_limit = false, max_motor_torque = 3000, motor_speed = 0.1 * math.pi}
