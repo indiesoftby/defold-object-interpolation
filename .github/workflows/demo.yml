@@ -23,6 +23,7 @@ jobs:
           OUTPUT_DIR: public
         run: |
           lsb_release -a
+          chmod +x ./utils/build_demo.sh
           ./utils/build_demo.sh
 
       - name: Deploy to Pages 🚀
