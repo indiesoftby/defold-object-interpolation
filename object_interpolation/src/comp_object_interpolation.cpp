@@ -15,11 +15,6 @@
 
 namespace dmGameObject
 {
-    /*
-     * Allows for updating transforms an extra time
-     */
-    void UpdateTransforms(dmGameObject::HCollection hcollection);
-
     /**
      * Get absolute identifier relative to #instance. The returned identifier is the
      * representation of the qualified name, i.e. the path from root-collection to the sub-collection which the #instance belongs to.
