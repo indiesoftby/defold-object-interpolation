@@ -22,7 +22,7 @@ function init(self)
         local angle = math.random() * math.pi * 2
         local x = math.cos(angle) * 50
         local y = math.sin(angle) * 50
-        factory.create("#test_object", go.get_position("/pinpoint") + vmath.vector3(x, y, 0))
+        collectionfactory.create("#test_object", go.get_position("/pinpoint") + vmath.vector3(x, y, 0))
     end
 end
 

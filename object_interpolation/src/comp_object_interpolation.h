@@ -9,7 +9,6 @@ namespace dmObjectInterpolation
     {
         APPLY_TRANSFORM_NONE = 0,
         APPLY_TRANSFORM_TARGET = 1,
-        APPLY_TRANSFORM_RENDER = 2,
     };
 
     void SetInterpolationEnabled(bool enabled);
@@ -31,14 +30,9 @@ namespace dmObjectInterpolation
         dmGameObject::HInstance m_TargetInstance;
 
         // TODO: update the comments
-        // In APPLY_TRANSFORM_RENDER ...
         // In APPLY_TRANSFORM_TARGET ...
         dmVMath::Point3 m_FromPosition;
         dmVMath::Quat   m_FromRotation;
-
-        // ...
-        dmVMath::Point3 m_PreRenderPosition;
-        dmVMath::Quat   m_PreRenderRotation;
 
         // ...
         dmVMath::Point3 m_NextPosition;

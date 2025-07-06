@@ -39,7 +39,6 @@ static dmExtension::Result InitializeObjectInterpolation(dmExtension::Params* pa
 
     SETCONSTANT(APPLY_TRANSFORM_NONE, dmObjectInterpolation::APPLY_TRANSFORM_NONE);
     SETCONSTANT(APPLY_TRANSFORM_TARGET, dmObjectInterpolation::APPLY_TRANSFORM_TARGET);
-    SETCONSTANT(APPLY_TRANSFORM_RENDER, dmObjectInterpolation::APPLY_TRANSFORM_RENDER);
 
     lua_pop(params->m_L, 1);
     assert(top == lua_gettop(params->m_L));

@@ -1,4 +1,4 @@
-# Object Interpolation Component for Defold
+# Object Interpolation Component for Defold (PREVIEW)
 
 This component for the Defold game engine allows you to interpolate the position and rotation of a game object between fixed update steps. 
 
@@ -20,13 +20,11 @@ The default operation mode is `None`. In this mode, the component will not affec
 
 The most useful mode is `Target Object`. In this mode, the component will move the object you specify in the `Target Object` property, applying interpolated values to it. You can use relative and absolute paths as the object id (like in the `go.get_id()` script function).
 
-The third mode is `Render`. In this mode, the component will apply interpolated values to the object itself only during rendering (not applicable to Tilemap, as it calculates its vertex positions during update, not during render). *NOTE: Can be removed in the future in favor of the `Target Object` mode, because it runs against Defold engine best practices.*
-
 ## Component Properties
 
 ### Read Only
 
-- `apply_transform` (number) - The mode of the component (`object_interpolation.APPLY_TRANSFORM_NONE` - only interpolates values, `object_interpolation.APPLY_TRANSFORM_RENDER` - apply values for rendering, `object_interpolation.APPLY_TRANSFORM_TARGET` - apply interpolated values to the target game object).
+- `apply_transform` (number) - The mode of the component (`object_interpolation.APPLY_TRANSFORM_NONE` - only interpolates values, `object_interpolation.APPLY_TRANSFORM_TARGET` - apply interpolated values to the target game object).
 - `target_object` (hash) - The game object identifier that will be moved.
 
 ### Read/Write
@@ -49,7 +47,7 @@ print(go.get("#objectinterpolation", "rotation")) -- vmath.quat
 ## Component Messages
 
 - `set_apply_transform` (hash) - Change the transform mode and target game object, if needed, the message params are:
-    - `apply_transform` (number) - The mode of the component (`object_interpolation.APPLY_TRANSFORM_NONE` - only interpolates values, `object_interpolation.APPLY_TRANSFORM_RENDER` - apply values for rendering, `object_interpolation.APPLY_TRANSFORM_TARGET` - apply interpolated values to the target game object).
+    - `apply_transform` (number) - The mode of the component (`object_interpolation.APPLY_TRANSFORM_NONE` - only interpolates values, `object_interpolation.APPLY_TRANSFORM_TARGET` - apply interpolated values to the target game object).
     - `target_object` (hash) - The game object identifier that will be moved (only if `apply_transform` is `object_interpolation.APPLY_TRANSFORM_TARGET`).
 
 Example:
@@ -57,8 +55,6 @@ Example:
 ```lua
 -- set new mode to "Target" and the target object to move
 msg.post("#objectinterpolation", "set_apply_transform", { apply_transform = object_interpolation.APPLY_TRANSFORM_TARGET, target_object = hash("/object_to_move") })
--- or empty to set self as moved object
-msg.post("#objectinterpolation", "set_apply_transform", { apply_transform = object_interpolation.APPLY_TRANSFORM_RENDER })
 -- or set to none to disable applying interpolated transform to the object
 msg.post("#objectinterpolation", "set_apply_transform", { apply_transform = object_interpolation.APPLY_TRANSFORM_NONE })
 ```

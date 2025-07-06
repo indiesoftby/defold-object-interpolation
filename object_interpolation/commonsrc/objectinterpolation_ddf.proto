@@ -14,7 +14,6 @@ message ObjectInterpolationDesc
     {
         APPLY_TRANSFORM_NONE   = 0 [(displayName) = "None"];
         APPLY_TRANSFORM_TARGET = 1 [(displayName) = "Target Object"];
-        APPLY_TRANSFORM_RENDER = 2 [(displayName) = "Render Only"];
     }
 
     required ApplyTransform apply_transform = 1 [default = APPLY_TRANSFORM_NONE];

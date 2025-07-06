@@ -23,7 +23,3 @@
   - name: APPLY_TRANSFORM_TARGET
     type: number
     desc: Apply interpolation to the target object.
-
-  - name: APPLY_TRANSFORM_RENDER
-    type: number
-    desc: Use interpolated values for rendering only.

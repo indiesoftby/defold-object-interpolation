@@ -110,12 +110,6 @@ namespace dmObjectInterpolation
             component->m_TargetInstance = 0;
             return true;
         }
-        else if (apply_transform == dmObjectInterpolationDDF::ObjectInterpolationDesc::APPLY_TRANSFORM_RENDER)
-        {
-            component->m_ApplyTransform = APPLY_TRANSFORM_RENDER;
-            component->m_TargetInstance = 0;
-            return true;
-        }
         else if (apply_transform == dmObjectInterpolationDDF::ObjectInterpolationDesc::APPLY_TRANSFORM_TARGET)
         {
             component->m_TargetInstance = dmGameObject::GetInstanceFromIdentifier(collection, target_object_hash);
@@ -129,9 +123,9 @@ namespace dmObjectInterpolation
             {
                 if (component->m_TargetInstance == component->m_Instance)
                 {
-                    component->m_ApplyTransform = APPLY_TRANSFORM_RENDER;
+                    component->m_ApplyTransform = APPLY_TRANSFORM_NONE;
                     component->m_TargetInstance = 0;
-                    dmLogError("Target object is the same as the current object. Transform mode is set to APPLY_TRANSFORM_RENDER.");
+                    dmLogError("Target object is the same as the current object. Transform mode is set to APPLY_TRANSFORM_NONE.");
                     return false;
                 }
 
@@ -207,7 +201,6 @@ namespace dmObjectInterpolation
 
     static void DestroyComponent(ObjectInterpolationWorld* world, uint32_t index)
     {
-        // ObjectInterpolationComponent* component = &world->m_Components.Get(index);
         world->m_Components.Free(index, true);
     }
 
@@ -227,16 +220,6 @@ namespace dmObjectInterpolation
         component->m_AddedToUpdate = true;
         return dmGameObject::CREATE_RESULT_OK;
     }
-
-    // Note:
-    //   params.m_UpdateContext is
-    //     struct UpdateContext
-    //     {
-    //         float    m_TimeScale;
-    //         float    m_DT;
-    //         float    m_AccumFrameTime;          // Unscaled time. Amount of time left after last fixed update tick
-    //         uint32_t m_FixedUpdateFrequency;    // Hz
-    //     };
 
     dmGameObject::UpdateResult CompObjectInterpolationUpdate(const dmGameObject::ComponentsUpdateParams& params, dmGameObject::ComponentsUpdateResult& update_result)
     {
@@ -310,7 +293,7 @@ namespace dmObjectInterpolation
             if (!component.m_AddedToUpdate)
                 continue;
 
-            component.m_Time = 0.0f; // Clamp01(component.m_Time - dt) / 2.0f; // Или отнять fixed dt?
+            component.m_Time = 0.0f;
             component.m_FixedTime = dt;
             component.m_FixedUpdateDT = dt;
 
@@ -324,90 +307,6 @@ namespace dmObjectInterpolation
 
             component.m_FromPosition = component.m_NextPosition;
             component.m_FromRotation = component.m_NextRotation;
-
-            // if (component.m_ApplyTransform == APPLY_TRANSFORM_NONE || component.m_ApplyTransform == APPLY_TRANSFORM_RENDER)
-            // {
-            //     component.m_FromPosition = component.m_NextPosition;
-            //     component.m_FromRotation = component.m_NextRotation;
-            // }
-            // else if (component.m_ApplyTransform == APPLY_TRANSFORM_TARGET)
-            // {
-            //     const Point3& from_position = dmGameObject::GetPosition(component.m_TargetInstance);
-            //     const Quat&   from_rotation = dmGameObject::GetRotation(component.m_TargetInstance);
-            //     component.m_FromPosition = from_position; // in fact, it's m_NextPosition
-            //     component.m_FromRotation = from_rotation; // in fact, it's m_NextRotation
-            // }
-        }
-
-        return dmGameObject::UPDATE_RESULT_OK;
-    }
-
-    dmGameObject::UpdateResult CompObjectInterpolationRender(const dmGameObject::ComponentsRenderParams& params)
-    {
-        ObjectInterpolationWorld*              world = (ObjectInterpolationWorld*)params.m_World;
-        dmArray<ObjectInterpolationComponent>& components = world->m_Components.GetRawObjects();
-        const uint32_t                         count = components.Size();
-        bool                                   update_transforms = false;
-
-        for (uint32_t i = 0; i < count; ++i)
-        {
-            ObjectInterpolationComponent& component = components[i];
-            if (!component.m_Enabled || !component.m_AddedToUpdate)
-                continue;
-
-            // DEBUG
-            // dmLogInfo("     Render");
-
-            if (component.m_ApplyTransform == APPLY_TRANSFORM_RENDER)
-            {
-                const Point3& to_position = dmGameObject::GetPosition(component.m_Instance);
-                const Quat&   to_rotation = dmGameObject::GetRotation(component.m_Instance);
-                component.m_PreRenderPosition = to_position;
-                component.m_PreRenderRotation = to_rotation;
-                dmGameObject::SetPosition(component.m_Instance, component.m_NextPosition);
-                dmGameObject::SetRotation(component.m_Instance, component.m_NextRotation);
-
-                update_transforms = true;
-            }
-        }
-
-        if (update_transforms)
-        {
-            dmGameObject::UpdateTransforms(params.m_Collection);
-        }
-
-        return dmGameObject::UPDATE_RESULT_OK;
-    }
-
-    dmGameObject::UpdateResult CompObjectInterpolationPostUpdate(const dmGameObject::ComponentsPostUpdateParams& params)
-    {
-        ObjectInterpolationWorld*              world = (ObjectInterpolationWorld*)params.m_World;
-        dmArray<ObjectInterpolationComponent>& components = world->m_Components.GetRawObjects();
-        const uint32_t                         count = components.Size();
-        bool                                   update_transforms = false;
-
-        for (uint32_t i = 0; i < count; ++i)
-        {
-            ObjectInterpolationComponent& component = components[i];
-            if (!component.m_Enabled || !component.m_AddedToUpdate)
-                continue;
-
-            if (component.m_ApplyTransform == APPLY_TRANSFORM_RENDER)
-            {
-                // DEBUG
-                // const Point3& position = dmGameObject::GetPosition(component.m_Instance);
-                // dmLogInfo("    PostUpdate - PreRender Position: %f, %f, %f", component.m_PreRenderPosition.getX(), component.m_PreRenderPosition.getY(), component.m_PreRenderPosition.getZ());
-                // dmLogInfo("                 Component Position: %f, %f, %f", position.getX(), position.getY(), position.getZ());
-
-                update_transforms = true;
-                dmGameObject::SetPosition(component.m_Instance, component.m_PreRenderPosition);
-                dmGameObject::SetRotation(component.m_Instance, component.m_PreRenderRotation);
-            }
-        }
-
-        if (update_transforms)
-        {
-            dmGameObject::UpdateTransforms(params.m_Collection);
         }
 
         return dmGameObject::UPDATE_RESULT_OK;
@@ -471,7 +370,6 @@ namespace dmObjectInterpolation
 
     dmGameObject::PropertyResult CompObjectInterpolationGetProperty(const dmGameObject::ComponentGetPropertyParams& params, dmGameObject::PropertyDesc& out_value)
     {
-        // ObjectInterpolationContext* context = (ObjectInterpolationContext*)params.m_Context;
         ObjectInterpolationWorld*                          world = (ObjectInterpolationWorld*)params.m_World;
         ObjectInterpolationComponent*                      component = GetComponentFromIndex(world, *params.m_UserData);
         dmObjectInterpolationDDF::ObjectInterpolationDesc* ddf = component->m_Resource->m_DDF;
@@ -578,8 +476,6 @@ namespace dmObjectInterpolation
         ComponentTypeSetAddToUpdateFn(type, CompObjectInterpolationAddToUpdate);
         ComponentTypeSetUpdateFn(type, CompObjectInterpolationUpdate);
         ComponentTypeSetFixedUpdateFn(type, CompObjectInterpolationFixedUpdate);
-        ComponentTypeSetPostUpdateFn(type, CompObjectInterpolationPostUpdate);
-        ComponentTypeSetRenderFn(type, CompObjectInterpolationRender);
         ComponentTypeSetOnMessageFn(type, CompObjectInterpolationOnMessage);
         ComponentTypeSetOnReloadFn(type, CompObjectInterpolationOnReload);
         ComponentTypeSetGetPropertyFn(type, CompObjectInterpolationGetProperty);
