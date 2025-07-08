@@ -203,6 +203,7 @@ subpixels = 1
 track_cpu = 0
 enabled = true
 sleep_between_server_updates = 0
+performance_timeline_enabled = 0
 
 [liveupdate]
 settings = /liveupdate.settings
