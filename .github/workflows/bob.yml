@@ -35,7 +35,7 @@ jobs:
           java -jar bob.jar --version
 
       - name: Install dependencies
-        run: sudo apt-get install -y libopenal-dev libgl1-mesa-dev libglw1-mesa-dev freeglut3-dev
+        run: sudo apt-get update && sudo apt-get install -y libopenal-dev libgl1-mesa-dev libglw1-mesa-dev freeglut3-dev
 
       - name: Resolve libraries
         run: java -jar bob.jar resolve --email a@b.com --auth 123456
