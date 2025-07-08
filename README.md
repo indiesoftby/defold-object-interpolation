@@ -61,6 +61,18 @@ msg.post("#objectinterpolation", "set_apply_transform", { apply_transform = obje
 msg.post("#objectinterpolation", "set_apply_transform", { apply_transform = object_interpolation.APPLY_TRANSFORM_NONE })
 ```
 
+## Lua Script API
+
+Functions:
+
+- `object_interpolation.set_enabled(enabled)` - Default is `true`, and when `false`, transformation will be applied to objects immediately as if you just copy position and rotation values from the source object to the target object. *Note: the component respects the engine game loop and has a lower priority than all other Defold engine system, and therefore, the position of the target object will lag exactly 1 frame (for 144hz display this is 1/144 ms and so on) from the position set in the last fixed update cycle (if you use it for collision objects and you enable physics debug view, you will notice this).*
+- `object_interpolation.is_enabled()` - Check if the enabled flag is set.
+
+Constants:
+
+- `object_interpolation.APPLY_TRANSFORM_NONE` - Do not apply interpolation to the target object.
+- `object_interpolation.APPLY_TRANSFORM_TARGET` - Apply interpolation to the target object.
+
 ## `game.project` Settings
 
 Like any other Defold system, this component has a maximum limit on the number of objects that can be processed. The default `max_count` is 1024, but you can safely increase this value and set it with a large margin, as the system uses a small amount of memory per component instance.

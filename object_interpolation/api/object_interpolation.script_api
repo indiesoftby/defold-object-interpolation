@@ -4,7 +4,7 @@
   members:
   - name: set_enabled
     type: function
-    desc: Enable or disable the object interpolation (globally).
+    desc: Default is `true`, and when `false`, transformation will be applied to objects immediately as if you just copy position and rotation values from the source object to the target object.
     args:
       - name: enabled
         type: boolean
@@ -18,7 +18,7 @@
 
   - name: APPLY_TRANSFORM_NONE
     type: number
-    desc: No transformation.
+    desc: No transformation applied to the target object.
 
   - name: APPLY_TRANSFORM_TARGET
     type: number
