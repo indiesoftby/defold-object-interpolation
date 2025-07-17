@@ -22,9 +22,9 @@ namespace dmObjectInterpolation
 
         // Time values used for interpolation
         float m_Time;
+        float m_UpdateDT;
         float m_FixedTime;
         float m_FixedUpdateDT;
-        float m_UpdateDT;
 
         // Target object to interpolate into if APPLY_TRANSFORM_TARGET is set
         dmGameObject::HInstance m_TargetInstance;
@@ -41,6 +41,7 @@ namespace dmObjectInterpolation
         // Flags
         uint8_t m_Enabled : 1;
         uint8_t m_AddedToUpdate : 1;
+        uint8_t m_ResetFixedTime : 1;
     };
 } // namespace dmObjectInterpolation
 

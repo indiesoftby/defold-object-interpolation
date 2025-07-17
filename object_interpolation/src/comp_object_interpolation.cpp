@@ -232,6 +232,7 @@ namespace dmObjectInterpolation
 
             component.m_UpdateDT = dt;
             component.m_Time += dt;
+            component.m_ResetFixedTime = 1;
 
             if (!component.m_Enabled)
                 continue;
@@ -243,7 +244,7 @@ namespace dmObjectInterpolation
             // dmLogInfo("     Update - From position: %f, %f, %f", component.m_FromPosition.getX(), component.m_FromPosition.getY(), component.m_FromPosition.getZ());
             // dmLogInfo("                    Lerp to: %f, %f, %f", to_position.getX(), to_position.getY(), to_position.getZ());
 
-            const float interpolation_factor = Clamp01(component.m_Time / component.m_FixedTime);
+            const float interpolation_factor = component.m_FixedTime == 0.0f ? 1.0f : Clamp01(component.m_Time / component.m_FixedTime);
             if (g_InterpolationEnabled)
             {
                 component.m_NextPosition = dmVMath::Point3(dmVMath::Lerp(interpolation_factor, dmVMath::Vector3(component.m_FromPosition), dmVMath::Vector3(to_position)));
@@ -289,8 +290,14 @@ namespace dmObjectInterpolation
                 continue;
 
             component.m_Time = 0.0f;
-            component.m_FixedTime = dt;
+
             component.m_FixedUpdateDT = dt;
+            if (component.m_ResetFixedTime)
+            {
+                component.m_ResetFixedTime = 0;
+                component.m_FixedTime = 0.0f;
+            }
+            component.m_FixedTime += dt;
 
             if (!component.m_Enabled)
                 continue;
