@@ -13,20 +13,6 @@
 #include "objectinterpolation_ddf.h" // generated from the objectinterpolation_ddf.proto
 #include "res_objectinterpolation.h"
 
-namespace dmGameObject
-{
-    /**
-     * Get absolute identifier relative to #instance. The returned identifier is the
-     * representation of the qualified name, i.e. the path from root-collection to the sub-collection which the #instance belongs to.
-     * Example: if #instance is part of a sub-collection in the root-collection named "sub" and id == "a" the returned identifier represents the path "sub.a"
-     * @param instance Instance to absolute identifier to
-     * @param id Identifier relative to #instance
-     * @param id_size Lenght of the id
-     * @return Absolute identifier
-     */
-    dmhash_t GetAbsoluteIdentifier(dmGameObject::HInstance instance, const char* id, uint32_t id_size);
-} // namespace dmGameObject
-
 namespace dmObjectInterpolation
 {
     using namespace dmVMath;
@@ -169,7 +155,7 @@ namespace dmObjectInterpolation
         if (component->m_Resource->m_DDF->m_TargetObject[0] != '\0')
         {
             // dmLogInfo("Target object: %s", component->m_Resource->m_DDF->m_TargetObject);
-            target_object_hash = dmGameObject::GetAbsoluteIdentifier(component->m_Instance, component->m_Resource->m_DDF->m_TargetObject, strlen(component->m_Resource->m_DDF->m_TargetObject));
+            target_object_hash = dmGameObject::GetAbsoluteIdentifier(component->m_Instance, component->m_Resource->m_DDF->m_TargetObject);
             // dmLogInfo("-> Target object hash: %lu", (unsigned long)target_object_hash);
         }
 
@@ -354,7 +340,7 @@ namespace dmObjectInterpolation
         dmhash_t target_object_hash = 0;
         if (component->m_Resource->m_DDF->m_TargetObject[0] != '\0')
         {
-            target_object_hash = dmGameObject::GetAbsoluteIdentifier(component->m_Instance, component->m_Resource->m_DDF->m_TargetObject, strlen(component->m_Resource->m_DDF->m_TargetObject));
+            target_object_hash = dmGameObject::GetAbsoluteIdentifier(component->m_Instance, component->m_Resource->m_DDF->m_TargetObject);
         }
 
         UpdateApplyTransform(component, component->m_Resource->m_DDF->m_ApplyTransform, target_object_hash);
