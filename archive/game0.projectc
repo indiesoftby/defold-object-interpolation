@@ -148,7 +148,7 @@ immersive_mode = 0
 display_cutout = 1
 debuggable = 0
 proguard = 
-extract_native_libs = 1
+extract_native_libs = 0
 
 [osx]
 app_icon = 
@@ -218,6 +218,8 @@ max_tile_count = 2048
 run_while_iconified = 0
 fixed_update_frequency = 20
 max_time_step = 0.05
+
+[font]
 
 [native_extension]
 app_manifest = /test/2d/box2d_new.appmanifest
