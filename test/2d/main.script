@@ -37,5 +37,6 @@ end
 function on_input(self, action_id, action)
     if action_id == hash("key_space") and action.pressed then
         object_interpolation.set_enabled(not object_interpolation.is_enabled())
+        print("object interpolation is " .. (object_interpolation.is_enabled() and "ENABLED" or "DISABLED"))
     end
 end
