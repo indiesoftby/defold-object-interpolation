@@ -43,6 +43,11 @@ namespace dmObjectInterpolation
     {
         ObjectInterpolationContext*                m_Context;
         dmObjectPool<ObjectInterpolationComponent> m_Components;
+
+        // Time values used for interpolation
+        float m_Timeline;
+        float m_FixedTimeline;
+        float m_FromTimeline;
     };
 
     static inline float Clamp01(float value)
@@ -210,15 +215,14 @@ namespace dmObjectInterpolation
         const uint32_t                         count = components.Size();
         bool                                   update_transforms = false;
 
+        // Update time values once per world
+        world->m_Timeline += dt;
+
         for (uint32_t i = 0; i < count; ++i)
         {
             ObjectInterpolationComponent& component = components[i];
             if (!component.m_AddedToUpdate)
                 continue;
-
-            component.m_UpdateDT = dt;
-            component.m_Time += dt;
-            component.m_ResetFixedTime = 1;
 
             if (!component.m_Enabled)
                 continue;
@@ -230,7 +234,12 @@ namespace dmObjectInterpolation
             // dmLogInfo("     Update - From position: %f, %f, %f", component.m_FromPosition.getX(), component.m_FromPosition.getY(), component.m_FromPosition.getZ());
             // dmLogInfo("                    Lerp to: %f, %f, %f", to_position.getX(), to_position.getY(), to_position.getZ());
 
-            const float interpolation_factor = component.m_FixedTime == 0.0f ? 1.0f : Clamp01(component.m_Time / component.m_FixedTime);
+            float interpolation_factor = 1.0f;
+            if (world->m_FixedTimeline > 0)
+            {
+                interpolation_factor = (world->m_Timeline - world->m_FromTimeline) / (world->m_FixedTimeline - world->m_FromTimeline);
+            }
+
             if (g_InterpolationEnabled)
             {
                 component.m_NextPosition = dmVMath::Point3(dmVMath::Lerp(interpolation_factor, dmVMath::Vector3(component.m_FromPosition), dmVMath::Vector3(to_position)));
@@ -265,25 +274,32 @@ namespace dmObjectInterpolation
     {
         ObjectInterpolationWorld*              world = (ObjectInterpolationWorld*)params.m_World;
         float                                  dt = params.m_UpdateContext->m_DT;
-        float                                  accumFrameTime = params.m_UpdateContext->m_AccumFrameTime;
         dmArray<ObjectInterpolationComponent>& components = world->m_Components.GetRawObjects();
         const uint32_t                         count = components.Size();
+
+        // Update time values once per world
+        if (world->m_Timeline > world->m_FixedTimeline)
+        {
+            world->m_FixedTimeline = 0.0f;
+            world->m_Timeline = 0.0f;
+        }
+        world->m_FixedTimeline += dt;
+        world->m_FromTimeline = world->m_Timeline;
+
+        // Keep values in reasonable range
+        if (world->m_Timeline > 100.0f)
+        {
+            float min_timeline = dmMath::Min(dmMath::Min(world->m_Timeline, world->m_FixedTimeline), world->m_FromTimeline);
+            world->m_Timeline -= min_timeline;
+            world->m_FixedTimeline -= min_timeline;
+            world->m_FromTimeline -= min_timeline;
+        }
 
         for (uint32_t i = 0; i < count; ++i)
         {
             ObjectInterpolationComponent& component = components[i];
             if (!component.m_AddedToUpdate)
-                continue;
-
-            component.m_Time = 0.0f;
-
-            component.m_FixedUpdateDT = dt;
-            if (component.m_ResetFixedTime)
-            {
-                component.m_ResetFixedTime = 0;
-                component.m_FixedTime = 0.0f;
-            }
-            component.m_FixedTime += dt;
+            continue;
 
             if (!component.m_Enabled)
                 continue;

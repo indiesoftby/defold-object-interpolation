@@ -20,21 +20,15 @@ namespace dmObjectInterpolation
         ObjectInterpolationApplyTransform m_ApplyTransform;
         dmGameObject::HInstance           m_Instance;
 
-        // Time values used for interpolation
-        float m_Time;
-        float m_UpdateDT;
-        float m_FixedTime;
-        float m_FixedUpdateDT;
-
         // Target object to interpolate into if APPLY_TRANSFORM_TARGET is set
         dmGameObject::HInstance m_TargetInstance;
 
-        // TODO: update the comments
-        // In APPLY_TRANSFORM_TARGET ...
+        // Position and rotation of the object at the start of the interpolation
         dmVMath::Point3 m_FromPosition;
         dmVMath::Quat   m_FromRotation;
 
-        // ...
+        // Calculated interpolated position and rotation for the current frame
+        // Result of lerp/slerp between m_FromPosition and the current position/rotation of the object
         dmVMath::Point3 m_NextPosition;
         dmVMath::Quat   m_NextRotation;
 
