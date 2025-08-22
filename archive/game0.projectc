@@ -221,6 +221,9 @@ max_time_step = 0.05
 
 [font]
 
+[object_interpolation]
+max_count = 1024
+
 [native_extension]
 app_manifest = /test/2d/box2d_new.appmanifest
 
