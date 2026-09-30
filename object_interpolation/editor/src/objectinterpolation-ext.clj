@@ -138,10 +138,16 @@
 ;; of transaction steps that populate our ObjectInterpolationNode from the protobuf data.
 ;; In our case, that simply means setting the property values on our node to the
 ;; values from the protobuf data.
-(defn- load-objectinterpolation [_project self _resource data]
-  (gu/set-properties-from-pb-map self @objectinterpolation-plugin-desc-cls data
-    apply-transform :apply-transform
-    target-object :target-object))
+(defn- load-objectinterpolation
+  ;; Defold 1.14.0 API.
+  ([_load-opts {self :node-id data :source-value}]
+   (load-objectinterpolation nil self nil data))
+
+  ;; Defold <=1.13.2 API; shared implementation.
+  ([_project self _resource data]
+   (gu/set-properties-from-pb-map self @objectinterpolation-plugin-desc-cls data
+     apply-transform :apply-transform
+     target-object :target-object)))
 
 ;; Defines a node type that will represent ObjectInterpolation resources in the graph.
 ;; Whenever we encounter a .objectinterpolation file in the project, a ObjectInterpolationNode is
